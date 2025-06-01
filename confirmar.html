@@ -232,58 +232,72 @@
 
     // script.js
 
-    import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  // confirma.js
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("form-confirmacao");
-      const mensagem = document.getElementById("mensagem");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+// Substitua pelos seus dados do Firebase
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_BUCKET",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
 
-        const nome = document.getElementById("nome").value.trim();
-        const acompanhantesInput = document.getElementById("acompanhantes").value;
-        const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
-        const levaCrianca = document.getElementById("levaCrianca").value;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        if (!nome || !levaCrianca) {
-          alert("Por favor, preencha todos os campos.");
-          return;
-        }
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("form-confirmacao");
+  const mensagem = document.getElementById("mensagem");
 
-        // Verifica se o nome já existe
-        const snapshot = await getDocs(collection(db, "convidados"));
-        const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        if (nomeExiste) {
-          mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
-          mensagem.style.color = "red";
-          return;
-        }
+    const nome = document.getElementById("nome").value.trim();
+    const acompanhantesInput = document.getElementById("acompanhantes").value;
+    const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
+    const levaCrianca = document.getElementById("levaCrianca").value;
 
-        try {
-          await addDoc(collection(db, "convidados"), {
-            nome,
-            acompanhantes,
-            levaCrianca,
-            dataHora: new Date().toISOString()
-          });
+    if (!nome || !levaCrianca) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
 
-          mensagem.textContent = "Presença confirmada com sucesso!";
-          mensagem.style.color = "#008000";
-          form.reset();
-          setTimeout(() => mensagem.textContent = "", 5000);
-        } catch (err) {
-          console.error("Erro ao salvar no Firestore:", err);
-          mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
-          mensagem.style.color = "red";
-        }
+    // Verifica se o nome já existe
+    const snapshot = await getDocs(collection(db, "convidados"));
+    const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
+
+    if (nomeExiste) {
+      mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
+      mensagem.style.color = "red";
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "convidados"), {
+        nome,
+        acompanhantes,
+        levaCrianca,
+        dataHora: new Date().toISOString()
       });
-    });
+
+      mensagem.textContent = "Presença confirmada com sucesso!";
+      mensagem.style.color = "#008000";
+      form.reset();
+      setTimeout(() => mensagem.textContent = "", 5000);
+    } catch (err) {
+      console.error("Erro ao salvar no Firestore:", err);
+      mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
+      mensagem.style.color = "red";
+    }
+  });
+});
 
   </script>
-
-  <script type="module" src="script.js"></script>
 
 </body>
 
