@@ -6,15 +6,14 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/11.8.1/firebase
 
 // Configuração do Firebase do seu projeto
 const firebaseConfig = {
-  apiKey: "AIzaSyCpmi4qoO6ZBDyZwe9GxcL8LZUnGH5dNLA",
-  authDomain: "festabelavista.firebaseapp.com",
-  projectId: "festabelavista",
-  storageBucket: "festabelavista.firebasestorage.app",
-  messagingSenderId: "920311866040",
-  appId: "1:920311866040:web:8788b358923eb90dae8a4d",
-  measurementId: "G-76K3JFZN6R"
-};
-
+    apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
+    authDomain: "belavista2025-1186d.firebaseapp.com",
+    projectId: "belavista2025-1186d",
+    storageBucket: "belavista2025-1186d.firebasestorage.app",
+    messagingSenderId: "1012774404009",
+    appId: "1:1012774404009:web:87874367783aab92bb8eb8",
+    measurementId: "G-VF2N5H1KWP"
+  };
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 
