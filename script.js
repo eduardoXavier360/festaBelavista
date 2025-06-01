@@ -3,15 +3,17 @@ import { db } from './firebase-config.js';
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // Função para salvar convidado no Firestore
-async function salvarConvidado(nome, acompanhantes) {
+async function salvarConvidado(nome, acompanhantes, levaCrianca) {
     try {
         const docRef = await addDoc(collection(db, "convidados"), {
             nome: nome,
             acompanhantes: acompanhantes,
+            levaCrianca: levaCrianca,
             dataHora: new Date().toISOString()
         });
         console.log("✅ Convidado salvo com ID:", docRef.id);
         alert("Presença confirmada com sucesso!");
+        window.location.href = "index.html"; // volta ao convite
     } catch (e) {
         console.error("❌ Erro ao salvar convidado:", e);
         alert("Erro ao confirmar presença. Verifique a conexão.");
@@ -26,7 +28,14 @@ if (window.location.pathname.includes("confirmar.html")) {
             e.preventDefault();
             const nome = document.getElementById("nome").value.trim();
             const acompanhantes = parseInt(document.getElementById("acompanhantes").value) || 0;
-            if (nome) salvarConvidado(nome, acompanhantes);
+            const levaCrianca = document.querySelector('input[name="crianca"]:checked')?.value || "Não informado";
+
+            if (!nome) {
+                alert("Por favor, digite seu nome.");
+                return;
+            }
+
+            salvarConvidado(nome, acompanhantes, levaCrianca);
         });
     });
 }
