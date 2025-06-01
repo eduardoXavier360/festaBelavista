@@ -100,92 +100,103 @@
       color: white;
     }
   </style>
-</head>
-<body>
 
-  <h2>Área de Administração</h2>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  <!-- Container da senha -->
-  <div id="senha-container">
-    <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off" />
-    <button id="btn-verificar">Entrar</button>
-    <div id="msg-erro"></div>
-  </div>
+    // COLOQUE AQUI SUAS CONFIGURAÇÕES DO FIREBASE:
+    const firebaseConfig = {
+        apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
+    authDomain: "belavista2025-1186d.firebaseapp.com",
+    projectId: "belavista2025-1186d",
+    storageBucket: "belavista2025-1186d.firebasestorage.app",
+    messagingSenderId: "1012774404009",
+    appId: "1:1012774404009:web:87874367783aab92bb8eb8",
+    measurementId: "G-VF2N5H1KWP"
+    };
 
-  <!-- Conteúdo da lista escondido inicialmente -->
-  <div id="conteudo-admin" style="display:none;">
-    <h2>Lista de Confirmados</h2>
-    <ul id="lista-convidados"></ul>
-    <p id="total"></p>
-    <button id="limpar">Limpar Tudo</button>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    <a href="index.html" id="btn-voltar">Voltar ao convite</a>
-  </div>
-
-  <script>
     const senhaCorreta = "junina2025";
+
+    // Elementos da interface
     const senhaInput = document.getElementById("senha");
     const btnVerificar = document.getElementById("btn-verificar");
     const msgErro = document.getElementById("msg-erro");
     const senhaContainer = document.getElementById("senha-container");
     const conteudoAdmin = document.getElementById("conteudo-admin");
-
     const ul = document.getElementById("lista-convidados");
     const totalPessoasEl = document.getElementById("total");
     const limparBtn = document.getElementById("limpar");
 
-    // Atualiza a lista exibida
-    function atualizarLista() {
+    // Atualiza a lista puxando do Firestore
+    async function atualizarLista() {
       ul.innerHTML = "";
-      const lista = JSON.parse(localStorage.getItem("convidados") || "[]");
-
-      if (lista.length === 0) {
-        ul.innerHTML = "<li>Nenhum convidado confirmado ainda.</li>";
-        totalPessoasEl.textContent = "";
-        return;
-      }
-
       let totalPessoas = 0;
 
-      lista.forEach((item, index) => {
-        const acompanhantes = item.acompanhantes || 0;
-        const levaCrianca = item.levaCrianca || "Não informado";
+      try {
+        const querySnapshot = await getDocs(collection(db, "convidados"));
+        const documentos = querySnapshot.docs;
 
-        totalPessoas += 1 + acompanhantes;
+        if (documentos.length === 0) {
+          ul.innerHTML = "<li>Nenhum convidado confirmado ainda.</li>";
+          totalPessoasEl.textContent = "";
+          return;
+        }
 
-        const li = document.createElement("li");
-        li.textContent = `${item.nome} + ${acompanhantes} acompanhante(s) | Criança: ${levaCrianca}`;
+        documentos.forEach((docSnap) => {
+          const dados = docSnap.data();
+          const acompanhantes = parseInt(dados.acompanhantes) || 0;
+          const levaCrianca = dados.levaCrianca || "Não informado";
+          totalPessoas += 1 + acompanhantes;
 
-        const btnRemover = document.createElement("button");
-        btnRemover.textContent = "Remover";
-        btnRemover.onclick = () => {
-          lista.splice(index, 1);
-          localStorage.setItem("convidados", JSON.stringify(lista));
-          atualizarLista();
-        };
+          const li = document.createElement("li");
+          li.textContent = `${dados.nome} + ${acompanhantes} acompanhante(s) | Criança: ${levaCrianca}`;
 
-        li.appendChild(btnRemover);
-        ul.appendChild(li);
-      });
+          const btnRemover = document.createElement("button");
+          btnRemover.textContent = "Remover";
+          btnRemover.onclick = async () => {
+            if (confirm(`Remover confirmação de ${dados.nome}?`)) {
+              await deleteDoc(doc(db, "convidados", docSnap.id));
+              atualizarLista();
+            }
+          };
 
-      totalPessoasEl.textContent = `Total de pessoas (incluindo acompanhantes): ${totalPessoas}`;
+          li.appendChild(btnRemover);
+          ul.appendChild(li);
+        });
+
+        totalPessoasEl.textContent = `Total de pessoas (incluindo acompanhantes): ${totalPessoas}`;
+      } catch (error) {
+        ul.innerHTML = "<li>Erro ao carregar a lista.</li>";
+        totalPessoasEl.textContent = "";
+        console.error("Erro ao buscar dados do Firestore:", error);
+      }
     }
 
-    limparBtn.addEventListener("click", () => {
+    limparBtn.addEventListener("click", async () => {
       if (confirm("Deseja realmente limpar toda a lista de confirmados?")) {
-        localStorage.removeItem("convidados");
-        atualizarLista();
+        try {
+          const querySnapshot = await getDocs(collection(db, "convidados"));
+          const promises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "convidados", docSnap.id)));
+          await Promise.all(promises);
+          atualizarLista();
+        } catch (error) {
+          alert("Erro ao limpar lista: " + error.message);
+        }
       }
     });
 
-    // Mostrar conteúdo admin e esconder senha
+    // Mostrar e esconder a área administrativa
     function mostrarAdmin() {
       senhaContainer.style.display = "none";
       conteudoAdmin.style.display = "block";
       atualizarLista();
     }
 
-    // Esconder admin e mostrar senha
     function esconderAdmin() {
       senhaContainer.style.display = "block";
       conteudoAdmin.style.display = "none";
@@ -194,7 +205,7 @@
       senhaInput.focus();
     }
 
-    // Verificar senha ao clicar no botão
+    // Evento botão verificar senha
     btnVerificar.addEventListener("click", () => {
       const senhaDigitada = senhaInput.value.trim();
       if (senhaDigitada === senhaCorreta) {
@@ -206,28 +217,48 @@
       }
     });
 
-    // Solicitar senha quando o usuário sair do conteúdo administrativo
-    window.addEventListener("blur", () => {
-      if (conteudoAdmin.style.display === "block") {
-        esconderAdmin();
-      }
-    });
-
-    window.addEventListener("beforeunload", () => {
-      if (conteudoAdmin.style.display === "block") {
-        esconderAdmin();
-      }
-    });
-
-    // Permitir "Enter" na senha para entrar
     senhaInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         btnVerificar.click();
       }
     });
 
+    // Esconder admin se perder foco da janela ou recarregar
+    window.addEventListener("blur", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+    window.addEventListener("beforeunload", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+
     // Começa pedindo senha
     esconderAdmin();
+
   </script>
+
+</head>
+<body>
+
+  <h2>Área de Administração</h2>
+
+  <div id="senha-container">
+    <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off" />
+    <button id="btn-verificar">Entrar</button>
+    <div id="msg-erro"></div>
+  </div>
+
+  <div id="conteudo-admin" style="display:none;">
+    <h2>Lista de Confirmados</h2>
+    <ul id="lista-convidados"></ul>
+    <p id="total"></p>
+    <button id="limpar">Limpar Tudo</button>
+
+    <a href="index.html" id="btn-voltar">Voltar ao convite</a>
+  </div>
+
 </body>
 </html>

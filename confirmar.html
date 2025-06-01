@@ -167,7 +167,8 @@
   <h3>Preencha os Dados com Nome Completo!</h3>
   <form id="form-confirmacao">
     <input type="text" id="nome" placeholder="Seu nome" required />
-    <input type="number" id="acompanhantes" placeholder="Nº de Acompanhantes" min="0" value="Acompanhante" />
+    <input type="number" id="acompanhantes" placeholder="Nº de Acompanhantes" min="0" />
+
     
     <select id="levaCrianca" required>
       <option value="" disabled selected>Vai levar criança?</option>
@@ -182,50 +183,58 @@
   <p><a href="index.html">Voltar ao convite</a></p>
 
   <script>
-    const form = document.getElementById("form-confirmacao");
-    const mensagem = document.getElementById("mensagem");
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    // script.js
 
-      const nome = document.getElementById("nome").value.trim();
-      const acompanhantesInput = document.getElementById("acompanhantes").value;
-      const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
-      const levaCrianca = document.getElementById("levaCrianca").value;
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-      if (!nome) {
-        alert("Por favor, preencha seu nome.");
-        return;
-      }
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("form-confirmacao");
+  const mensagem = document.getElementById("mensagem");
 
-      if (!levaCrianca) {
-        alert("Por favor, informe se vai levar criança.");
-        return;
-      }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const lista = JSON.parse(localStorage.getItem("convidados") || "[]");
+    const nome = document.getElementById("nome").value.trim();
+    const acompanhantesInput = document.getElementById("acompanhantes").value;
+    const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
+    const levaCrianca = document.getElementById("levaCrianca").value;
 
-      const nomeExiste = lista.some(
-        (item) => item.nome.toLowerCase() === nome.toLowerCase()
-      );
+    if (!nome || !levaCrianca) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
 
-      if (nomeExiste) {
-        mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
-        mensagem.style.color = "red";
-        return;
-      }
+    // Verifica se o nome já existe
+    const snapshot = await getDocs(collection(db, "convidados"));
+    const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
 
-      lista.push({ nome, acompanhantes, levaCrianca });
-      localStorage.setItem("convidados", JSON.stringify(lista));
+    if (nomeExiste) {
+      mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
+      mensagem.style.color = "red";
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "convidados"), {
+        nome,
+        acompanhantes,
+        levaCrianca,
+        dataHora: new Date().toISOString()
+      });
 
       mensagem.textContent = "Presença confirmada com sucesso!";
       mensagem.style.color = "#008000";
       form.reset();
+      setTimeout(() => mensagem.textContent = "", 5000);
+    } catch (err) {
+      console.error("Erro ao salvar no Firestore:", err);
+      mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
+      mensagem.style.color = "red";
+    }
+  });
+});
 
-      setTimeout(() => {
-        mensagem.textContent = "";
-      }, 5000);
-    });
   </script>
   
 <script type="module" src="script.js"></script>

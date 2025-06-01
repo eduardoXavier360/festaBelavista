@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Convite Festa Junina</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Convite Festa Junina</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
@@ -40,18 +40,12 @@
     .bandeirinha {
       width: 40px;
       height: 30px;
-      background-color: red;
       clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
       animation: balancar 3s ease-in-out infinite alternate;
       transform-origin: top left;
       box-shadow: 0 0 3px rgba(0,0,0,0.2);
     }
-    .bandeirha:nth-child(2) { background-color: #ffcc00; animation-delay: 0.3s; }
-    .bandeirha:nth-child(3) { background-color: #008000; animation-delay: 0.6s; }
-    .bandeirha:nth-child(4) { background-color: #ff6600; animation-delay: 0.9s; }
-    .bandeirha:nth-child(5) { background-color: #ff0000; animation-delay: 1.2s; }
-
-    /* Corrigindo nome da classe para todas as bandeirinhas */
+    .bandeirinha:nth-child(1) { background-color: #ff0000; animation-delay: 0s; }
     .bandeirinha:nth-child(2) { background-color: #ffcc00; animation-delay: 0.3s; }
     .bandeirinha:nth-child(3) { background-color: #008000; animation-delay: 0.6s; }
     .bandeirinha:nth-child(4) { background-color: #ff6600; animation-delay: 0.9s; }
@@ -225,11 +219,11 @@
 <body>
   <!-- Bandeirinhas espalhadas -->
   <div class="bandeirinhas">
-    <div class="bandeirinha" style="background:#ff0000;"></div>
-    <div class="bandeirinha" style="background:#ffcc00;"></div>
-    <div class="bandeirinha" style="background:#008000;"></div>
-    <div class="bandeirinha" style="background:#ff6600;"></div>
-    <div class="bandeirinha" style="background:#ff0000;"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
   </div>
 
   <h1>Você está convidado para nossa Festa Junina!</h1>
@@ -261,7 +255,5 @@
       correctLevel : QRCode.CorrectLevel.H
     });
   </script>
-
-
 </body>
 </html>
