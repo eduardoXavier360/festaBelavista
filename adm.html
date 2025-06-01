@@ -2,281 +2,275 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Administração - Lista de Convidados</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #fefbd8;
-        }
+  <meta charset="UTF-8" />
+  <title>Administração - Lista de Convidados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fefbd8;
+    }
 
-        ul {
-            padding-left: 0;
-        }
+    ul {
+      padding-left: 0;
+    }
 
-        li {
-            list-style: none;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    li {
+      list-style: none;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        button {
-            margin-left: 15px;
-            padding: 6px 12px;
-            font-size: 0.9em;
-            background-color: #ff6666;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
+    button {
+      margin-left: 15px;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      background-color: #ff6666;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #cc3333;
-        }
+    button:hover {
+      background-color: #cc3333;
+    }
 
-        #total {
-            font-weight: bold;
-            margin-top: 20px;
-        }
+    #total {
+      font-weight: bold;
+      margin-top: 20px;
+    }
 
-        #limpar {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-            background-color: #6666ff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
+    #limpar {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #6666ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
 
-        #limpar:hover {
-            background-color: #3333cc;
-        }
+    #limpar:hover {
+      background-color: #3333cc;
+    }
 
-        /* Container da senha */
-        #senha-container {
-            margin-bottom: 20px;
-        }
+    #senha-container {
+      margin-bottom: 20px;
+    }
 
-        #senha {
-            padding: 8px;
-            font-size: 1rem;
-            border-radius: 6px;
-            border: 2px solid #6666ff;
-            width: 200px;
-            margin-right: 10px;
-        }
+    #senha {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 2px solid #6666ff;
+      width: 200px;
+      margin-right: 10px;
+    }
 
-        #btn-verificar {
-            padding: 8px 15px;
-            font-size: 1rem;
-            border-radius: 6px;
-            border: none;
-            background-color: #6666ff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    #btn-verificar {
+      padding: 8px 15px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      background-color: #6666ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        #btn-verificar:hover {
-            background-color: #3333cc;
-        }
+    #btn-verificar:hover {
+      background-color: #3333cc;
+    }
 
-        #msg-erro {
-            color: red;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+    #msg-erro {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
 
-        #btn-voltar {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 10px 20px;
-            background-color: #ffcc00;
-            color: #4b2e2e;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
+    #btn-voltar {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      color: #4b2e2e;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
 
-        #btn-voltar:hover {
-            background-color: #ffaa00;
-            color: white;
-        }
-    </style>
-
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-
-        // COLOQUE AQUI SUAS CONFIGURAÇÕES DO FIREBASE:
-        const firebaseConfig = {
-            apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
-            authDomain: "belavista2025-1186d.firebaseapp.com",
-            projectId: "belavista2025-1186d",
-            storageBucket: "belavista2025-1186d.firebasestorage.app",
-            messagingSenderId: "1012774404009",
-            appId: "1:1012774404009:web:87874367783aab92bb8eb8",
-            measurementId: "G-VF2N5H1KWP"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const senhaCorreta = "junina2025";
-
-        // Elementos da interface
-        const senhaInput = document.getElementById("senha");
-        const btnVerificar = document.getElementById("btn-verificar");
-        const msgErro = document.getElementById("msg-erro");
-        const senhaContainer = document.getElementById("senha-container");
-        const conteudoAdmin = document.getElementById("conteudo-admin");
-        const ul = document.getElementById("lista-convidados");
-        const totalPessoasEl = document.getElementById("total");
-        const limparBtn = document.getElementById("limpar");
-
-        // Atualiza a lista puxando do Firestore
-        async function atualizarLista() {
-            ul.innerHTML = "";
-            let totalPessoas = 0;
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "convidados"));
-                const documentos = querySnapshot.docs;
-
-                if (documentos.length === 0) {
-                    ul.innerHTML = "<li>Nenhum convidado confirmado ainda.</li>";
-                    totalPessoasEl.textContent = "";
-                    return;
-                }
-
-                documentos.forEach((docSnap) => {
-                    const dados = docSnap.data();
-                    const acompanhantes = parseInt(dados.acompanhantes) || 0;
-                    const levaCrianca = dados.levaCrianca || "Não informado";
-                    totalPessoas += 1 + acompanhantes;
-
-                    const li = document.createElement("li");
-                    li.textContent = `${dados.nome} + ${acompanhantes} acompanhante(s) | Criança: ${levaCrianca}`;
-
-                    const btnRemover = document.createElement("button");
-                    btnRemover.textContent = "Remover";
-                    btnRemover.onclick = async () => {
-                        if (confirm(`Remover confirmação de ${dados.nome}?`)) {
-                            await deleteDoc(doc(db, "convidados", docSnap.id));
-                            atualizarLista();
-                        }
-                    };
-
-                    li.appendChild(btnRemover);
-                    ul.appendChild(li);
-                });
-
-                totalPessoasEl.textContent = `Total de pessoas (incluindo acompanhantes): ${totalPessoas}`;
-            } catch (error) {
-                ul.innerHTML = "<li>Erro ao carregar a lista.</li>";
-                totalPessoasEl.textContent = "";
-                console.error("Erro ao buscar dados do Firestore:", error);
-            }
-        }
-
-        limparBtn.addEventListener("click", async () => {
-            if (confirm("Deseja realmente limpar toda a lista de confirmados?")) {
-                try {
-                    const querySnapshot = await getDocs(collection(db, "convidados"));
-                    const promises = querySnapshot.docs.map(docSnap => deleteDoc(doc(db, "convidados", docSnap.id)));
-                    await Promise.all(promises);
-                    atualizarLista();
-                } catch (error) {
-                    alert("Erro ao limpar lista: " + error.message);
-                }
-            }
-        });
-
-        // Mostrar e esconder a área administrativa
-        function mostrarAdmin() {
-            senhaContainer.style.display = "none";
-            conteudoAdmin.style.display = "block";
-            atualizarLista();
-        }
-
-        function esconderAdmin() {
-            senhaContainer.style.display = "block";
-            conteudoAdmin.style.display = "none";
-            senhaInput.value = "";
-            msgErro.textContent = "";
-            senhaInput.focus();
-        }
-
-        // Evento botão verificar senha
-        btnVerificar.addEventListener("click", () => {
-            const senhaDigitada = senhaInput.value.trim();
-            if (senhaDigitada === senhaCorreta) {
-                mostrarAdmin();
-            } else {
-                msgErro.textContent = "Senha incorreta. Tente novamente.";
-                senhaInput.value = "";
-                senhaInput.focus();
-            }
-        });
-
-        senhaInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                btnVerificar.click();
-            }
-        });
-
-        // Esconder admin se perder foco da janela ou recarregar
-        window.addEventListener("blur", () => {
-            if (conteudoAdmin.style.display === "block") {
-                esconderAdmin();
-            }
-        });
-        window.addEventListener("beforeunload", () => {
-            if (conteudoAdmin.style.display === "block") {
-                esconderAdmin();
-            }
-        });
-
-        // Começa pedindo senha
-        esconderAdmin();
-
-    </script>
-
+    #btn-voltar:hover {
+      background-color: #ffaa00;
+      color: white;
+    }
+  </style>
 </head>
 
 <body>
 
-    <h2>Área de Administração</h2>
+  <h2>Área de Administração</h2>
 
-    <div id="senha-container">
-        <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off" />
-        <button id="btn-verificar">Entrar</button>
-        <div id="msg-erro"></div>
-    </div>
+  <div id="senha-container">
+    <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off" />
+    <button id="btn-verificar">Entrar</button>
+    <div id="msg-erro"></div>
+  </div>
 
-    <div id="conteudo-admin" style="display:none;">
-        <h2>Lista de Confirmados</h2>
-        <ul id="lista-convidados"></ul>
-        <p id="total"></p>
-        <button id="limpar">Limpar Tudo</button>
+  <div id="conteudo-admin" style="display:none;">
+    <h2>Lista de Confirmados</h2>
+    <ul id="lista-convidados"></ul>
+    <p id="total"></p>
+    <button id="limpar">Limpar Tudo</button>
+    <a href="index.html" id="btn-voltar">Voltar ao convite</a>
+  </div>
 
-        <a href="index.html" id="btn-voltar">Voltar ao convite</a>
-    </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
+      authDomain: "belavista2025-1186d.firebaseapp.com",
+      projectId: "belavista2025-1186d",
+      storageBucket: "belavista2025-1186d.firebasestorage.app",
+      messagingSenderId: "1012774404009",
+      appId: "1:1012774404009:web:87874367783aab92bb8eb8",
+      measurementId: "G-VF2N5H1KWP"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const senhaCorreta = "junina2025";
+
+    const senhaInput = document.getElementById("senha");
+    const btnVerificar = document.getElementById("btn-verificar");
+    const msgErro = document.getElementById("msg-erro");
+    const senhaContainer = document.getElementById("senha-container");
+    const conteudoAdmin = document.getElementById("conteudo-admin");
+    const ul = document.getElementById("lista-convidados");
+    const totalPessoasEl = document.getElementById("total");
+    const limparBtn = document.getElementById("limpar");
+
+    async function atualizarLista() {
+      ul.innerHTML = "";
+      let totalPessoas = 0;
+      try {
+        const querySnapshot = await getDocs(collection(db, "convidados"));
+        const documentos = querySnapshot.docs;
+
+        if (documentos.length === 0) {
+          ul.innerHTML = "<li>Nenhum convidado confirmado ainda.</li>";
+          totalPessoasEl.textContent = "";
+          return;
+        }
+
+        documentos.forEach((docSnap) => {
+          const dados = docSnap.data();
+          const acompanhantes = parseInt(dados.acompanhantes) || 0;
+          const levaCrianca = dados.levaCrianca || "Não informado";
+          totalPessoas += 1 + acompanhantes;
+
+          const li = document.createElement("li");
+          li.textContent = `${dados.nome} + ${acompanhantes} acompanhante(s) | Criança: ${levaCrianca}`;
+
+          const btnRemover = document.createElement("button");
+          btnRemover.textContent = "Remover";
+          btnRemover.onclick = async () => {
+            if (confirm(`Remover confirmação de ${dados.nome}?`)) {
+              await deleteDoc(doc(db, "convidados", docSnap.id));
+              atualizarLista();
+            }
+          };
+
+          li.appendChild(btnRemover);
+          ul.appendChild(li);
+        });
+
+        totalPessoasEl.textContent = `Total de pessoas (incluindo acompanhantes): ${totalPessoas}`;
+      } catch (error) {
+        ul.innerHTML = "<li>Erro ao carregar a lista.</li>";
+        totalPessoasEl.textContent = "";
+        console.error("Erro ao buscar dados do Firestore:", error);
+      }
+    }
+
+    limparBtn.addEventListener("click", async () => {
+      if (confirm("Deseja realmente limpar toda a lista de confirmados?")) {
+        try {
+          const querySnapshot = await getDocs(collection(db, "convidados"));
+          const promises = querySnapshot.docs.map(docSnap =>
+            deleteDoc(doc(db, "convidados", docSnap.id))
+          );
+          await Promise.all(promises);
+          atualizarLista();
+        } catch (error) {
+          alert("Erro ao limpar lista: " + error.message);
+        }
+      }
+    });
+
+    function mostrarAdmin() {
+      senhaContainer.style.display = "none";
+      conteudoAdmin.style.display = "block";
+      atualizarLista();
+    }
+
+    function esconderAdmin() {
+      senhaContainer.style.display = "block";
+      conteudoAdmin.style.display = "none";
+      senhaInput.value = "";
+      msgErro.textContent = "";
+      senhaInput.focus();
+    }
+
+    btnVerificar.addEventListener("click", () => {
+      const senhaDigitada = senhaInput.value.trim();
+      if (senhaDigitada === senhaCorreta) {
+        mostrarAdmin();
+      } else {
+        msgErro.textContent = "Senha incorreta. Tente novamente.";
+        senhaInput.value = "";
+        senhaInput.focus();
+      }
+    });
+
+    senhaInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        btnVerificar.click();
+      }
+    });
+
+    window.addEventListener("blur", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+
+    window.addEventListener("beforeunload", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+
+    esconderAdmin();
+  </script>
 </body>
 
 </html>
