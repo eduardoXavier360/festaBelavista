@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confirme sua presença</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+    body {
+      font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
+      background: #fff8dc url('https://cdn.pixabay.com/photo/2016/06/01/20/10/festa-junina-1423928_960_720.jpg') no-repeat center top fixed;
+      background-size: cover;
+      color: #4b2e2e;
+      padding: 40px 15px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h2 {
+      font-size: 2.4rem;
+      margin-bottom: 25px;
+      text-shadow: 2px 2px #ffcc0099;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      user-select: none;
+      text-align: center;
+    }
+    form {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 35px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px 5px #ffcc0044;
+      min-width: 320px;
+      max-width: 400px;
+      width: 100%;
+      user-select: none;
+    }
+    input, select, button {
+      font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
+      display: block;
+      width: 100%;
+      margin: 15px 0;
+      padding: 14px 18px;
+      font-size: 1.2rem;
+      border-radius: 12px;
+      border: 2px solid #ffbb00;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      color: #4b2e2e;
+      background: #fff8dc;
+      text-align: center;
+      user-select: text;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #ffaa00;
+      box-shadow: 0 0 10px #ffaa0044;
+      background: #fffcee;
+    }
+    button {
+      background: linear-gradient(45deg, #ffcc00, #ff6600);
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      color: #4b2e2e;
+      text-shadow: 1px 1px #fff5c0aa;
+      box-shadow: 0 4px 8px #ff660055;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #ffaa00, #ff4400);
+      box-shadow: 0 6px 12px #ff440088;
+      transform: scale(1.05);
+      color: #fff;
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+    #mensagem {
+      margin-top: 25px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #008000;
+      text-shadow: 1px 1px 0 #d0f0c0;
+      user-select: none;
+      min-height: 30px;
+      transition: opacity 0.4s ease;
+    }
+    a {
+      margin-top: 30px;
+      font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
+      color: #4b2e2e;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      user-select: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    a:hover {
+      border-color: #ffcc00;
+      color: #ffaa00;
+    }
+    .bandeirinhas {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      user-select: none;
+      z-index: 5;
+    }
+    .bandeirinha {
+      width: 30px;
+      height: 22px;
+      background-color: red;
+      clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+      animation: balancar 3s ease-in-out infinite alternate;
+      transform-origin: top left;
+    }
+    .bandeirinha:nth-child(2) { background-color: #ffcc00; animation-delay: 0.3s; }
+    .bandeirinha:nth-child(3) { background-color: #008000; animation-delay: 0.6s; }
+    .bandeirinha:nth-child(4) { background-color: #ff6600; animation-delay: 0.9s; }
+    .bandeirinha:nth-child(5) { background-color: #ff0000; animation-delay: 1.2s; }
+    @keyframes balancar {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(12deg); }
+    }
+    @media (max-width: 480px) {
+      form {
+        padding: 25px 20px;
+        min-width: 260px;
+        max-width: 100%;
+      }
+      input, select, button {
+        font-size: 1rem;
+        padding: 12px 15px;
+        margin: 12px 0;
+      }
+      h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+      a {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bandeirinhas" aria-hidden="true">
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+    <div class="bandeirinha"></div>
+  </div>
+
+  <h2>Confirme sua presença</h2>
+  <h3>Preencha os Dados com Nome Completo!</h3>
+  <form id="form-confirmacao">
+    <input type="text" id="nome" placeholder="Seu nome" required />
+    <input type="number" id="acompanhantes" placeholder="Nº de Acompanhantes" min="0" value="Acompanhante" />
+    
+    <select id="levaCrianca" required>
+      <option value="" disabled selected>Vai levar criança?</option>
+      <option value="Sim">Sim</option>
+      <option value="Não">Não</option>
+    </select>
+    
+    <button type="submit">Confirmar</button>
+  </form>
+  <p id="mensagem"></p>
+
+  <p><a href="index.html">Voltar ao convite</a></p>
+
+  <script>
+    const form = document.getElementById("form-confirmacao");
+    const mensagem = document.getElementById("mensagem");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value.trim();
+      const acompanhantesInput = document.getElementById("acompanhantes").value;
+      const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
+      const levaCrianca = document.getElementById("levaCrianca").value;
+
+      if (!nome) {
+        alert("Por favor, preencha seu nome.");
+        return;
+      }
+
+      if (!levaCrianca) {
+        alert("Por favor, informe se vai levar criança.");
+        return;
+      }
+
+      const lista = JSON.parse(localStorage.getItem("convidados") || "[]");
+
+      const nomeExiste = lista.some(
+        (item) => item.nome.toLowerCase() === nome.toLowerCase()
+      );
+
+      if (nomeExiste) {
+        mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
+        mensagem.style.color = "red";
+        return;
+      }
+
+      lista.push({ nome, acompanhantes, levaCrianca });
+      localStorage.setItem("convidados", JSON.stringify(lista));
+
+      mensagem.textContent = "Presença confirmada com sucesso!";
+      mensagem.style.color = "#008000";
+      form.reset();
+
+      setTimeout(() => {
+        mensagem.textContent = "";
+      }, 5000);
+    });
+  </script>
+  
+<form>
+  <label for="nome">Seu nome:</label>
+  <input type="text" id="nome" required>
+  
+  <label for="acompanhantes">Acompanhantes:</label>
+  <input type="number" id="acompanhantes" value="0" min="0">
+  
+  <button type="submit">Confirmar</button>
+</form>
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>

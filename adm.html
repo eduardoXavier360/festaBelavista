@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administração - Lista de Convidados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fefbd8;
+    }
+    ul {
+      padding-left: 0;
+    }
+    li {
+      list-style: none;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      margin-left: 15px;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      background-color: #ff6666;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #cc3333;
+    }
+    #total {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    #limpar {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #6666ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    #limpar:hover {
+      background-color: #3333cc;
+    }
+    /* Container da senha */
+    #senha-container {
+      margin-bottom: 20px;
+    }
+    #senha {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 2px solid #6666ff;
+      width: 200px;
+      margin-right: 10px;
+    }
+    #btn-verificar {
+      padding: 8px 15px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      background-color: #6666ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #btn-verificar:hover {
+      background-color: #3333cc;
+    }
+    #msg-erro {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #btn-voltar {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      color: #4b2e2e;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    #btn-voltar:hover {
+      background-color: #ffaa00;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Área de Administração</h2>
+
+  <!-- Container da senha -->
+  <div id="senha-container">
+    <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off" />
+    <button id="btn-verificar">Entrar</button>
+    <div id="msg-erro"></div>
+  </div>
+
+  <!-- Conteúdo da lista escondido inicialmente -->
+  <div id="conteudo-admin" style="display:none;">
+    <h2>Lista de Confirmados</h2>
+    <ul id="lista-convidados"></ul>
+    <p id="total"></p>
+    <button id="limpar">Limpar Tudo</button>
+
+    <a href="index.html" id="btn-voltar">Voltar ao convite</a>
+  </div>
+
+  <script>
+    const senhaCorreta = "junina2025";
+    const senhaInput = document.getElementById("senha");
+    const btnVerificar = document.getElementById("btn-verificar");
+    const msgErro = document.getElementById("msg-erro");
+    const senhaContainer = document.getElementById("senha-container");
+    const conteudoAdmin = document.getElementById("conteudo-admin");
+
+    const ul = document.getElementById("lista-convidados");
+    const totalPessoasEl = document.getElementById("total");
+    const limparBtn = document.getElementById("limpar");
+
+    // Atualiza a lista exibida
+    function atualizarLista() {
+      ul.innerHTML = "";
+      const lista = JSON.parse(localStorage.getItem("convidados") || "[]");
+
+      if (lista.length === 0) {
+        ul.innerHTML = "<li>Nenhum convidado confirmado ainda.</li>";
+        totalPessoasEl.textContent = "";
+        return;
+      }
+
+      let totalPessoas = 0;
+
+      lista.forEach((item, index) => {
+        const acompanhantes = item.acompanhantes || 0;
+        const levaCrianca = item.levaCrianca || "Não informado";
+
+        totalPessoas += 1 + acompanhantes;
+
+        const li = document.createElement("li");
+        li.textContent = `${item.nome} + ${acompanhantes} acompanhante(s) | Criança: ${levaCrianca}`;
+
+        const btnRemover = document.createElement("button");
+        btnRemover.textContent = "Remover";
+        btnRemover.onclick = () => {
+          lista.splice(index, 1);
+          localStorage.setItem("convidados", JSON.stringify(lista));
+          atualizarLista();
+        };
+
+        li.appendChild(btnRemover);
+        ul.appendChild(li);
+      });
+
+      totalPessoasEl.textContent = `Total de pessoas (incluindo acompanhantes): ${totalPessoas}`;
+    }
+
+    limparBtn.addEventListener("click", () => {
+      if (confirm("Deseja realmente limpar toda a lista de confirmados?")) {
+        localStorage.removeItem("convidados");
+        atualizarLista();
+      }
+    });
+
+    // Mostrar conteúdo admin e esconder senha
+    function mostrarAdmin() {
+      senhaContainer.style.display = "none";
+      conteudoAdmin.style.display = "block";
+      atualizarLista();
+    }
+
+    // Esconder admin e mostrar senha
+    function esconderAdmin() {
+      senhaContainer.style.display = "block";
+      conteudoAdmin.style.display = "none";
+      senhaInput.value = "";
+      msgErro.textContent = "";
+      senhaInput.focus();
+    }
+
+    // Verificar senha ao clicar no botão
+    btnVerificar.addEventListener("click", () => {
+      const senhaDigitada = senhaInput.value.trim();
+      if (senhaDigitada === senhaCorreta) {
+        mostrarAdmin();
+      } else {
+        msgErro.textContent = "Senha incorreta. Tente novamente.";
+        senhaInput.value = "";
+        senhaInput.focus();
+      }
+    });
+
+    // Solicitar senha quando o usuário sair do conteúdo administrativo
+    window.addEventListener("blur", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+
+    window.addEventListener("beforeunload", () => {
+      if (conteudoAdmin.style.display === "block") {
+        esconderAdmin();
+      }
+    });
+
+    // Permitir "Enter" na senha para entrar
+    senhaInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        btnVerificar.click();
+      }
+    });
+
+    // Começa pedindo senha
+    esconderAdmin();
+  </script>
+</body>
+</html>
