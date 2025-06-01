@@ -1,259 +1,305 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Convite Festa Junina</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Convite Festa Junina</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 
-    body {
-      font-family: 'Fredericka the Great', cursive, 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      background: #fff8dc url('https://cdn.pixabay.com/photo/2018/05/30/15/05/festa-junina-3449623_960_720.jpg') no-repeat center center fixed;
-      background-size: cover;
-      padding: 20px 15px 100px; /* espaço embaixo para fogueira */
-      color: #4b2e2e;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-    }
+        body {
+            font-family: 'Fredericka the Great', cursive, 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: #fff8dc url('https://cdn.pixabay.com/photo/2018/05/30/15/05/festa-junina-3449623_960_720.jpg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px 15px 100px;
+            /* espaço embaixo para fogueira */
+            color: #4b2e2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
 
-    /* Bandeirinhas espalhadas no topo */
-    .bandeirinhas {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      display: flex;
-      justify-content: space-between;
-      pointer-events: none;
-      user-select: none;
-      z-index: 10;
-    }
+        /* Bandeirinhas espalhadas no topo */
+        .bandeirinhas {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            user-select: none;
+            z-index: 10;
+        }
 
-    .bandeirinha {
-      width: 40px;
-      height: 30px;
-      clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
-      animation: balancar 3s ease-in-out infinite alternate;
-      transform-origin: top left;
-      box-shadow: 0 0 3px rgba(0,0,0,0.2);
-    }
-    .bandeirinha:nth-child(1) { background-color: #ff0000; animation-delay: 0s; }
-    .bandeirinha:nth-child(2) { background-color: #ffcc00; animation-delay: 0.3s; }
-    .bandeirinha:nth-child(3) { background-color: #008000; animation-delay: 0.6s; }
-    .bandeirinha:nth-child(4) { background-color: #ff6600; animation-delay: 0.9s; }
-    .bandeirinha:nth-child(5) { background-color: #ff0000; animation-delay: 1.2s; }
+        .bandeirinha {
+            width: 40px;
+            height: 30px;
+            clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+            animation: balancar 3s ease-in-out infinite alternate;
+            transform-origin: top left;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        }
 
-    @keyframes balancar {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(15deg); }
-    }
+        .bandeirinha:nth-child(1) {
+            background-color: #ff0000;
+            animation-delay: 0s;
+        }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      text-shadow: 2px 2px #ffcc00;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      z-index: 1;
-      position: relative;
-    }
+        .bandeirinha:nth-child(2) {
+            background-color: #ffcc00;
+            animation-delay: 0.3s;
+        }
 
-    p {
-      font-size: 1.3rem;
-      margin-bottom: 25px;
-      text-shadow: 1px 1px #ffcc00aa;
-      z-index: 1;
-      position: relative;
-    }
+        .bandeirinha:nth-child(3) {
+            background-color: #008000;
+            animation-delay: 0.6s;
+        }
 
-    #qrcode {
-      margin: 0 auto 30px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.95);
-      display: inline-block;
-      border-radius: 20px;
-      box-shadow: 0 0 15px 5px #ffcc0066;
-      transition: transform 0.3s ease;
-      max-width: 280px;
-      max-height: 280px;
-      position: relative;
-      z-index: 1;
-    }
-    #qrcode:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 30px 10px #ffaa0077;
-    }
+        .bandeirinha:nth-child(4) {
+            background-color: #ff6600;
+            animation-delay: 0.9s;
+        }
 
-    a {
-      display: inline-block;
-      margin: 10px 15px;
-      text-decoration: none;
-      color: #4b2e2e;
-      font-weight: bold;
-      background: linear-gradient(45deg, #ffcc00, #ff6600);
-      padding: 12px 28px;
-      border-radius: 25px;
-      box-shadow: 2px 2px 5px #b8860b;
-      transition: background 0.3s ease, transform 0.2s ease;
-      font-size: 1.1rem;
-      text-shadow: 1px 1px 1px #fff8dcaa;
-      user-select: none;
-      position: relative;
-      z-index: 1;
-    }
-    a:hover {
-      background: linear-gradient(45deg, #ffaa00, #ff4400);
-      transform: scale(1.05);
-      color: #fff;
-      box-shadow: 3px 3px 10px #ff660011;
-    }
+        .bandeirinha:nth-child(5) {
+            background-color: #ff0000;
+            animation-delay: 1.2s;
+        }
 
-    footer {
-      margin-top: 50px;
-      font-size: 1rem;
-      color: #4b2e2e;
-      text-shadow: 1px 1px 2px #ffcc0055;
-      position: relative;
-      z-index: 1;
-    }
+        @keyframes balancar {
+            0% {
+                transform: rotate(0deg);
+            }
 
-    /* Fogueira no rodapé */
-    .fogueira {
-      position: fixed;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 140px;
-      pointer-events: none;
-      user-select: none;
-      z-index: 0;
-      filter: drop-shadow(0 0 4px #ff6600aa);
-    }
+            100% {
+                transform: rotate(15deg);
+            }
+        }
 
-    /* Simples desenho da fogueira com CSS */
-    .fogueira .madeira {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 80px;
-      height: 12px;
-      background: #8b4513;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #60381388;
-      transform-origin: center;
-    }
-    .fogueira .madeira1 {
-      transform: translateX(-50%) rotate(20deg);
-      z-index: 2;
-    }
-    .fogueira .madeira2 {
-      transform: translateX(-50%) rotate(-20deg);
-      z-index: 1;
-    }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px #ffcc00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 1;
+            position: relative;
+        }
 
-    .fogueira .chama {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      width: 60px;
-      height: 100px;
-      background:
-        radial-gradient(circle at 30% 40%, #ff4400, transparent 70%),
-        radial-gradient(circle at 70% 60%, #ffbb33, transparent 70%),
-        radial-gradient(circle at 50% 30%, #ffaa00, transparent 80%);
-      filter: drop-shadow(0 0 15px #ff6600);
-      border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-      transform: translateX(-50%);
-      animation: flicker 1.2s infinite alternate;
-      z-index: 3;
-    }
+        p {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px #ffcc00aa;
+            z-index: 1;
+            position: relative;
+        }
 
-    @keyframes flicker {
-      0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
-      100% { transform: translateX(-50%) scale(1.1); opacity: 1; }
-    }
+        #qrcode {
+            margin: 0 auto 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            display: inline-block;
+            border-radius: 20px;
+            box-shadow: 0 0 15px 5px #ffcc0066;
+            transition: transform 0.3s ease;
+            max-width: 280px;
+            max-height: 280px;
+            position: relative;
+            z-index: 1;
+        }
 
-    /* Responsividade */
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.8rem;
-        margin-bottom: 10px;
-      }
-      p {
-        font-size: 1rem;
-        margin-bottom: 20px;
-      }
-      a {
-        margin: 8px 10px;
-        font-size: 1rem;
-        padding: 10px 20px;
-      }
-      #qrcode {
-        max-width: 220px;
-        max-height: 220px;
-        padding: 12px;
-      }
-      .bandeirinhas {
-        width: 95%;
-      }
-      .bandeirinha {
-        width: 30px;
-        height: 20px;
-      }
-      .fogueira {
-        width: 90px;
-        height: 110px;
-      }
-    }
-  </style>
+        #qrcode:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px 10px #ffaa0077;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px 15px;
+            text-decoration: none;
+            color: #4b2e2e;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffcc00, #ff6600);
+            padding: 12px 28px;
+            border-radius: 25px;
+            box-shadow: 2px 2px 5px #b8860b;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 1px #fff8dcaa;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        a:hover {
+            background: linear-gradient(45deg, #ffaa00, #ff4400);
+            transform: scale(1.05);
+            color: #fff;
+            box-shadow: 3px 3px 10px #ff660011;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 1rem;
+            color: #4b2e2e;
+            text-shadow: 1px 1px 2px #ffcc0055;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Fogueira no rodapé */
+        .fogueira {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 140px;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 4px #ff6600aa);
+        }
+
+        /* Simples desenho da fogueira com CSS */
+        .fogueira .madeira {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 80px;
+            height: 12px;
+            background: #8b4513;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #60381388;
+            transform-origin: center;
+        }
+
+        .fogueira .madeira1 {
+            transform: translateX(-50%) rotate(20deg);
+            z-index: 2;
+        }
+
+        .fogueira .madeira2 {
+            transform: translateX(-50%) rotate(-20deg);
+            z-index: 1;
+        }
+
+        .fogueira .chama {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            width: 60px;
+            height: 100px;
+            background:
+                radial-gradient(circle at 30% 40%, #ff4400, transparent 70%),
+                radial-gradient(circle at 70% 60%, #ffbb33, transparent 70%),
+                radial-gradient(circle at 50% 30%, #ffaa00, transparent 80%);
+            filter: drop-shadow(0 0 15px #ff6600);
+            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+            transform: translateX(-50%);
+            animation: flicker 1.2s infinite alternate;
+            z-index: 3;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+
+            a {
+                margin: 8px 10px;
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            #qrcode {
+                max-width: 220px;
+                max-height: 220px;
+                padding: 12px;
+            }
+
+            .bandeirinhas {
+                width: 95%;
+            }
+
+            .bandeirinha {
+                width: 30px;
+                height: 20px;
+            }
+
+            .fogueira {
+                width: 90px;
+                height: 110px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <!-- Bandeirinhas espalhadas -->
-  <div class="bandeirinhas">
-    <div class="bandeirinha"></div>
-    <div class="bandeirinha"></div>
-    <div class="bandeirinha"></div>
-    <div class="bandeirinha"></div>
-    <div class="bandeirinha"></div>
-  </div>
+    <!-- Bandeirinhas espalhadas -->
+    <div class="bandeirinhas">
+        <div class="bandeirinha"></div>
+        <div class="bandeirinha"></div>
+        <div class="bandeirinha"></div>
+        <div class="bandeirinha"></div>
+        <div class="bandeirinha"></div>
+    </div>
 
-  <h1>Você está convidado para nossa Festa Junina!</h1>
-  <p>Escaneie o QR Code para confirmar presença:</p>
-  <div id="qrcode"></div>
+    <h1>Você está convidado para nossa Festa Junina!</h1>
+    <p>Escaneie o QR Code para confirmar presença:</p>
+    <div id="qrcode"></div>
 
-  <p>
-    <a href="confirmar.html">Confirmar presença</a>
-    <a href="adm.html">Área administrativa</a>
-  </p>
+    <p>
+        <a href="confirmar.html">Confirmar presença</a>
+        <a href="adm.html">Área administrativa</a>
+    </p>
 
-  <footer>Festa Junina Bela Vista © 2025</footer>
+    <footer>Festa Junina Bela Vista © 2025</footer>
 
-  <!-- Fogueira no rodapé -->
-  <div class="fogueira" aria-hidden="true">
-    <div class="madeira madeira1"></div>
-    <div class="madeira madeira2"></div>
-    <div class="chama"></div>
-  </div>
+    <!-- Fogueira no rodapé -->
+    <div class="fogueira" aria-hidden="true">
+        <div class="madeira madeira1"></div>
+        <div class="madeira madeira2"></div>
+        <div class="chama"></div>
+    </div>
 
-  <script>
-    const urlConfirmacao = window.location.origin + "/confirmar.html";
-    new QRCode(document.getElementById("qrcode"), {
-      text: urlConfirmacao,
-      width: 256,
-      height: 256,
-      colorDark : "#4b2e2e",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.H
-    });
-  </script>
+    <script>
+        const urlConfirmacao = window.location.origin + "/confirmar.html";
+        new QRCode(document.getElementById("qrcode"), {
+            text: urlConfirmacao,
+            width: 256,
+            height: 256,
+            colorDark: "#4b2e2e",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    </script>
 </body>
+
 </html>

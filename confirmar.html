@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <title>Confirme sua presença</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
     body {
       font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
       background: #fff8dc url('https://cdn.pixabay.com/photo/2016/06/01/20/10/festa-junina-1423928_960_720.jpg') no-repeat center top fixed;
@@ -17,6 +19,7 @@
       align-items: center;
       min-height: 100vh;
     }
+
     h2 {
       font-size: 2.4rem;
       margin-bottom: 25px;
@@ -26,6 +29,7 @@
       user-select: none;
       text-align: center;
     }
+
     form {
       background: rgba(255, 255, 255, 0.95);
       padding: 30px 35px;
@@ -36,7 +40,10 @@
       width: 100%;
       user-select: none;
     }
-    input, select, button {
+
+    input,
+    select,
+    button {
       font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
       display: block;
       width: 100%;
@@ -52,12 +59,15 @@
       text-align: center;
       user-select: text;
     }
-    input:focus, select:focus {
+
+    input:focus,
+    select:focus {
       outline: none;
       border-color: #ffaa00;
       box-shadow: 0 0 10px #ffaa0044;
       background: #fffcee;
     }
+
     button {
       background: linear-gradient(45deg, #ffcc00, #ff6600);
       border: none;
@@ -69,15 +79,18 @@
       transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
       user-select: none;
     }
+
     button:hover {
       background: linear-gradient(45deg, #ffaa00, #ff4400);
       box-shadow: 0 6px 12px #ff440088;
       transform: scale(1.05);
       color: #fff;
     }
+
     button:active {
       transform: scale(0.97);
     }
+
     #mensagem {
       margin-top: 25px;
       font-size: 1.3rem;
@@ -88,6 +101,7 @@
       min-height: 30px;
       transition: opacity 0.4s ease;
     }
+
     a {
       margin-top: 30px;
       font-family: 'Fredericka the Great', cursive, Arial, sans-serif;
@@ -99,10 +113,12 @@
       border-bottom: 2px solid transparent;
       transition: border-color 0.3s ease;
     }
+
     a:hover {
       border-color: #ffcc00;
       color: #ffaa00;
     }
+
     .bandeirinhas {
       position: absolute;
       top: 10px;
@@ -116,44 +132,74 @@
       user-select: none;
       z-index: 5;
     }
+
     .bandeirinha {
       width: 30px;
       height: 22px;
       background-color: red;
       clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
-      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
       animation: balancar 3s ease-in-out infinite alternate;
       transform-origin: top left;
     }
-    .bandeirinha:nth-child(2) { background-color: #ffcc00; animation-delay: 0.3s; }
-    .bandeirinha:nth-child(3) { background-color: #008000; animation-delay: 0.6s; }
-    .bandeirinha:nth-child(4) { background-color: #ff6600; animation-delay: 0.9s; }
-    .bandeirinha:nth-child(5) { background-color: #ff0000; animation-delay: 1.2s; }
-    @keyframes balancar {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(12deg); }
+
+    .bandeirinha:nth-child(2) {
+      background-color: #ffcc00;
+      animation-delay: 0.3s;
     }
+
+    .bandeirinha:nth-child(3) {
+      background-color: #008000;
+      animation-delay: 0.6s;
+    }
+
+    .bandeirinha:nth-child(4) {
+      background-color: #ff6600;
+      animation-delay: 0.9s;
+    }
+
+    .bandeirinha:nth-child(5) {
+      background-color: #ff0000;
+      animation-delay: 1.2s;
+    }
+
+    @keyframes balancar {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(12deg);
+      }
+    }
+
     @media (max-width: 480px) {
       form {
         padding: 25px 20px;
         min-width: 260px;
         max-width: 100%;
       }
-      input, select, button {
+
+      input,
+      select,
+      button {
         font-size: 1rem;
         padding: 12px 15px;
         margin: 12px 0;
       }
+
       h2 {
         font-size: 1.8rem;
         margin-bottom: 20px;
       }
+
       a {
         font-size: 1rem;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="bandeirinhas" aria-hidden="true">
     <div class="bandeirinha"></div>
@@ -169,13 +215,13 @@
     <input type="text" id="nome" placeholder="Seu nome" required />
     <input type="number" id="acompanhantes" placeholder="Nº de Acompanhantes" min="0" />
 
-    
+
     <select id="levaCrianca" required>
       <option value="" disabled selected>Vai levar criança?</option>
       <option value="Sim">Sim</option>
       <option value="Não">Não</option>
     </select>
-    
+
     <button type="submit">Confirmar</button>
   </form>
   <p id="mensagem"></p>
@@ -186,58 +232,59 @@
 
     // script.js
 
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("form-confirmacao");
-  const mensagem = document.getElementById("mensagem");
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("form-confirmacao");
+      const mensagem = document.getElementById("mensagem");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const nome = document.getElementById("nome").value.trim();
-    const acompanhantesInput = document.getElementById("acompanhantes").value;
-    const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
-    const levaCrianca = document.getElementById("levaCrianca").value;
+        const nome = document.getElementById("nome").value.trim();
+        const acompanhantesInput = document.getElementById("acompanhantes").value;
+        const acompanhantes = acompanhantesInput === "" ? 0 : parseInt(acompanhantesInput);
+        const levaCrianca = document.getElementById("levaCrianca").value;
 
-    if (!nome || !levaCrianca) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
+        if (!nome || !levaCrianca) {
+          alert("Por favor, preencha todos os campos.");
+          return;
+        }
 
-    // Verifica se o nome já existe
-    const snapshot = await getDocs(collection(db, "convidados"));
-    const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
+        // Verifica se o nome já existe
+        const snapshot = await getDocs(collection(db, "convidados"));
+        const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
 
-    if (nomeExiste) {
-      mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
-      mensagem.style.color = "red";
-      return;
-    }
+        if (nomeExiste) {
+          mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
+          mensagem.style.color = "red";
+          return;
+        }
 
-    try {
-      await addDoc(collection(db, "convidados"), {
-        nome,
-        acompanhantes,
-        levaCrianca,
-        dataHora: new Date().toISOString()
+        try {
+          await addDoc(collection(db, "convidados"), {
+            nome,
+            acompanhantes,
+            levaCrianca,
+            dataHora: new Date().toISOString()
+          });
+
+          mensagem.textContent = "Presença confirmada com sucesso!";
+          mensagem.style.color = "#008000";
+          form.reset();
+          setTimeout(() => mensagem.textContent = "", 5000);
+        } catch (err) {
+          console.error("Erro ao salvar no Firestore:", err);
+          mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
+          mensagem.style.color = "red";
+        }
       });
-
-      mensagem.textContent = "Presença confirmada com sucesso!";
-      mensagem.style.color = "#008000";
-      form.reset();
-      setTimeout(() => mensagem.textContent = "", 5000);
-    } catch (err) {
-      console.error("Erro ao salvar no Firestore:", err);
-      mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
-      mensagem.style.color = "red";
-    }
-  });
-});
+    });
 
   </script>
-  
-<script type="module" src="script.js"></script>
+
+  <script type="module" src="script.js"></script>
 
 </body>
+
 </html>
