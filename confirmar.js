@@ -2,9 +2,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-// Configuração do Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
+  apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
     authDomain: "belavista2025-1186d.firebaseapp.com",
     projectId: "belavista2025-1186d",
     storageBucket: "belavista2025-1186d.appspot.com", // CORRIGIDO
@@ -33,17 +32,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Verifica se o nome já existe
-    const snapshot = await getDocs(collection(db, "convidados"));
-    const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
-
-    if (nomeExiste) {
-      mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
-      mensagem.style.color = "red";
-      return;
-    }
-
     try {
+      const snapshot = await getDocs(collection(db, "convidados"));
+      const nomeExiste = snapshot.docs.some(doc => doc.data().nome.toLowerCase() === nome.toLowerCase());
+
+      if (nomeExiste) {
+        mensagem.textContent = "Este nome já foi confirmado. Use nome e sobrenome diferente!";
+        mensagem.style.color = "red";
+        return;
+      }
+
       await addDoc(collection(db, "convidados"), {
         nome,
         acompanhantes,
@@ -54,7 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
       mensagem.textContent = "Presença confirmada com sucesso!";
       mensagem.style.color = "#008000";
       form.reset();
-      setTimeout(() => mensagem.textContent = "", 5000);
+
+      setTimeout(() => {
+        mensagem.textContent = "";
+      }, 5000);
+
     } catch (err) {
       console.error("Erro ao salvar no Firestore:", err);
       mensagem.textContent = "Erro ao confirmar presença. Tente novamente.";
@@ -62,4 +64,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-<script type="module" src="confirma.js"></script>
