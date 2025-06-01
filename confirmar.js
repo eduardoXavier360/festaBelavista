@@ -4,12 +4,13 @@ import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.c
 
 // Configuração do Firebase
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+    apiKey: "AIzaSyBbnj2yINGp-40cMK5hw_gUkNj5on8NREI",
+    authDomain: "belavista2025-1186d.firebaseapp.com",
+    projectId: "belavista2025-1186d",
+    storageBucket: "belavista2025-1186d.appspot.com", // CORRIGIDO
+    messagingSenderId: "1012774404009",
+    appId: "1:1012774404009:web:87874367783aab92bb8eb8",
+    measurementId: "G-VF2N5H1KWP"
 };
 
 const app = initializeApp(firebaseConfig);
